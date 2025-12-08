@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { LineChart, Line, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
 
-export default function Portfolio() {
+export default function Symulator() {
     const { theme } = useTheme();
 
     // --- DANE I STANY ---

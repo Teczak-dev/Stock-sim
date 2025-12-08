@@ -3,25 +3,28 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-// 1. IMPORTUJEMY NASZ KONTEKST (MÓZG OD KOLORÓW)
+// 1. KONTEKSTY (Stan globalny)
 import { ThemeProvider } from './context/ThemeContext'
+import { FavoritesProvider } from './context/FavoritesContext' // <--- TO JEST NOWE (SERDUSZKA)
 
-// Twoje importy stron
-import Home from './pages/Home'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import NotFound from './pages/NotFound'
-import Navigation from './components/Navigation'
-import Blog from './pages/Blog'
+// 2. STRONY
 import Layout from './components/Layout'
-import BlogPost from './pages/BlogPost'
-// import AdminDashboard from './pages/AdminDashboard' // To chyba nieużywane, skoro masz Adminav
+import Home from './pages/Home'
+import Market from './pages/Market'
+import Portfolio from './pages/Portfolio' // <--- TO JEST TWOJA GRA
+
+
+import NotFound from './pages/NotFound'
+
+
 import AdminUsers from './pages/AdminUsers'
 import AdminSettings from './pages/AdminSettings'
 import Adminav from './pages/Adminnav'
 import LoginForm from './pages/LoginForm'
-import Gry from './pages/Gry'
-import Gras from './pages/Gras'
+
+
+import Navigation from './components/Navigation'
+import Symulator from './pages/Symulator'
 
 const router = createBrowserRouter([
   {
@@ -34,20 +37,16 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
+        path: '/market', // Zmieniłem na małą literę (standard)
+        element: <Market />
+      },
+      {
+        path: '/portfolio', // <--- TU JEST TWOJA GRA
+        element: <Portfolio />
+      },
+      {
         path: '/symulator',
-        element: <About />
-      },
-      {
-        path: '/kontakt',
-        element: <Contact />
-      },
-      {
-        path: '/Blog',
-        element: <Blog />
-      },
-      {
-        path: '/Gry',
-        element: <Gry />
+        element: <Symulator />
       },
       {
         path: '/Login',
@@ -56,14 +55,6 @@ const router = createBrowserRouter([
       {
         path: '/NotFound',
         element: <><Navigation /></>
-      },
-      {
-        path: '/Blog/:postId',
-        element: <BlogPost />
-      },
-      {
-        path: '/Gry/:graid',
-        element: <Gras />
       },
       {
         path: '/Admin',
@@ -85,9 +76,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* 2. OWIJAMY CAŁĄ APLIKACJĘ PROVIDEREM, ŻEBY KAŻDA STRONA WIDZIAŁA KOLORY */}
+    {/* 3. OWIJAMY APLIKACJĘ W PROVIDERY */}
     <ThemeProvider>
-      <RouterProvider router={router} />
+      <FavoritesProvider> {/* <--- DZIĘKI TEMU DZIAŁAJĄ ULUBIONE */}
+        <RouterProvider router={router} />
+      </FavoritesProvider>
     </ThemeProvider>
   </StrictMode>,
 )

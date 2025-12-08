@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
@@ -7,10 +7,11 @@ export default function Home() {
 
     const [gpwData, setGpwData] = useState({ godzina: '--:--', czyOtwarta: false });
     const [nyseData, setNyseData] = useState({ godzina: '--:--', czyOtwarta: false });
-    const [wykresSciezka, setWykresSciezka] = useState("");
 
+    // Kolory zależne od motywu
     const kolorWykresu = theme === 'dark' ? '#34d399' : '#10b981';
-    const kolorTlaWykresu = theme === 'dark' ? '#0f172a' : '#525252ff';
+    const cardBg = theme === 'dark' ? '#1e293b' : '#f8fafc'; // Ciemny granat / Jasny szary
+    const textColor = theme === 'dark' ? '#fff' : '#1e293b';
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -21,44 +22,15 @@ export default function Home() {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        let sciezka = "M0,400";
-        let wys = 400;
-        for (let i = 1; i <= 150; i++) {
-            const zmiana = (Math.random() - 0.5) * 150;
-            wys += zmiana;
-            if (wys < 50) wys = 100;
-            if (wys > 550) wys = 500;
-            sciezka += ` L${i * 40},${wys}`;
-        }
-        setWykresSciezka(sciezka + " L6000,800 L0,800 Z");
-    }, []);
-
     return (
-        <div style={{ position: 'relative', width: '100%', height: '92vh', overflow: 'hidden', backgroundColor: theme === 'dark' ? '#111' : 'white', color: theme === 'dark' ? 'white' : 'black' }}>
+        // Usunąłem tło z tego miejsca, bo jest teraz w Layout
+        <div style={{ width: '100%', minHeight: '80vh', color: textColor }}>
 
-            <div className="animacja-tla" style={{ position: 'absolute', bottom: -50, left: 0, width: '200%', height: '80%', zIndex: 0, opacity: 0.5 }}>
-                <svg viewBox="0 0 4000 600" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }}>
-                    <defs>
-                        <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor={kolorWykresu} stopOpacity="0.3" />
-                            <stop offset="100%" stopColor={kolorTlaWykresu} stopOpacity="0" />
-                        </linearGradient>
-                    </defs>
-                    <path d={wykresSciezka} fill="url(#grad)" stroke={kolorWykresu} strokeWidth="2" />
-                </svg>
-            </div>
-
-            <style>{`
-                .animacja-tla { animation: ruch 40s linear infinite; }
-                @keyframes ruch { from {transform: translateX(0);} to {transform: translateX(-50%);} }
-            `}</style>
-
-            <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '60px', textAlign: 'center' }}>
+            <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '60px', textAlign: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
 
                 <div style={{ display: 'flex', gap: '20px', marginBottom: '40px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    <Karta nazwa="GPW Warszawa" dane={gpwData} godziny="09:00 - 17:00" kolor={kolorWykresu} bg={theme === 'dark' ? '#222' : '#f9f9f9'} />
-                    <Karta nazwa="NYSE New York" dane={nyseData} godziny="15:30 - 22:00 (PL)" kolor={kolorWykresu} bg={theme === 'dark' ? '#222' : '#f9f9f9'} />
+                    <Karta nazwa="GPW Warszawa" dane={gpwData} godziny="09:00 - 17:00" kolor={kolorWykresu} bg={cardBg} />
+                    <Karta nazwa="NYSE New York" dane={nyseData} godziny="15:30 - 22:00 (PL)" kolor={kolorWykresu} bg={cardBg} />
                 </div>
 
                 <h1 style={{ fontSize: '3.5rem', fontWeight: '900', marginBottom: '20px' }}>
@@ -66,17 +38,25 @@ export default function Home() {
                 </h1>
 
                 <p style={{ fontSize: '1.2rem', opacity: 0.7, maxWidth: '600px', marginBottom: '40px' }}>
-                    Symulator inwestycyjny. "jak zarobić aby się nie narobić"
+                    Symulator inwestycyjny. "Jak zarobić, aby się nie narobić".
                 </p>
 
-                <div style={{ display: 'flex', gap: '15px' }}>
-                    <Link to="/Symulator" style={{ ...btnBase, background: theme === 'dark' ? 'white' : 'black', color: theme === 'dark' ? 'black' : 'white' }}>Zacznij Grać</Link>
-                    <Link to="/market" style={{ ...btnBase, border: '2px solid gray', background: 'transparent', color: 'inherit' }}>Rynek</Link>
+                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    {/* Guziki */}
+                    <Link to="/portfolio" style={{ ...btnBase, background: textColor, color: theme === 'dark' ? '#000' : '#fff' }}>
+                        Zacznij Grać
+                    </Link>
+
+                    <Link to="/market" style={{ ...btnBase, border: '2px solid gray', background: 'transparent', color: 'inherit' }}>
+                        Rynek
+                    </Link>
                 </div>
             </div>
         </div>
     );
 }
+
+// --- FUNKCJE POMOCNICZE ---
 
 function sprawdzGielde(data, strefa, start, koniec) {
     const czas = new Date(data.toLocaleString("en-US", { timeZone: strefa }));
@@ -88,10 +68,17 @@ function sprawdzGielde(data, strefa, start, koniec) {
 
 function Karta({ nazwa, dane, godziny, kolor, bg }) {
     return (
-        <div style={{ background: bg, padding: '20px', borderRadius: '12px', minWidth: '220px', border: `1px solid ${dane.czyOtwarta ? kolor : 'gray'}` }}>
-            <h3>{nazwa}</h3>
+        <div style={{
+            background: bg,
+            padding: '20px',
+            borderRadius: '12px',
+            minWidth: '220px',
+            border: `1px solid ${dane.czyOtwarta ? kolor : 'gray'}`,
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+        }}>
+            <h3 style={{ fontSize: '1rem', opacity: 0.8, marginBottom: '5px' }}>{nazwa}</h3>
             <div style={{ fontSize: '1.8rem', fontWeight: 'bold', fontFamily: 'monospace' }}>{dane.godzina}</div>
-            <div style={{ color: dane.czyOtwarta ? kolor : '#ef4444', fontWeight: 'bold' }}>
+            <div style={{ color: dane.czyOtwarta ? kolor : '#ef4444', fontWeight: 'bold', margin: '5px 0' }}>
                 {dane.czyOtwarta ? '🟢 OTWARTA' : '🔴 ZAMKNIĘTA'}
             </div>
             <small style={{ opacity: 0.6 }}>{godziny}</small>
@@ -104,5 +91,6 @@ const btnBase = {
     textDecoration: 'none',
     borderRadius: '10px',
     fontWeight: 'bold',
-    transition: '0.2s'
+    transition: '0.2s',
+    display: 'inline-block'
 };
