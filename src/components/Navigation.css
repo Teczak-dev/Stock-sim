@@ -1,12 +1,7 @@
-/* src/components/Navigation.css */
-
 :root {
     --bg-dark: #0f172a;
-    /* Ciemne tło (Slate 900) */
     --text-gray: #94a3b8;
-    /* Szary tekst (Slate 400) */
     --accent-green: #10b981;
-    /* Giełdowa zieleń (Emerald 500) */
 }
 
 .navbar {
@@ -14,12 +9,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.8rem 2rem;
-
-    /* Idealne dopasowanie do tła z efektem szkła */
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -63,10 +55,8 @@
     }
 }
 
-/* Logo - proste i techniczne */
 .nav-logo {
     font-family: 'Inter', sans-serif;
-    /* Upewnij się że masz czcionkę lub systemową */
     font-size: 1.2rem;
     font-weight: 700;
     color: white;
@@ -87,7 +77,6 @@
     align-items: center;
 }
 
-/* Linki - minimalistyczne */
 .nav-item {
     text-decoration: none;
     color: var(--text-gray);
@@ -103,13 +92,11 @@
     background: rgba(255, 255, 255, 0.03);
 }
 
-/* Aktywny link - tylko delikatna zieleń */
 .nav-item.active {
     color: var(--accent-green);
     background: rgba(16, 185, 129, 0.1);
 }
 
-/* Przycisk Login - subtelny outline */
 .nav-btn-login {
     margin-left: 20px;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -125,7 +112,6 @@
     background: transparent;
 }
 
-/* Na urządzeniach o szerokości poniżej 768px (tablety) */
 @media (max-width: 768px) {
     .navbar {
         padding: 8px 16px;
@@ -146,7 +132,6 @@
     }
 }
 
-/* Na urządzeniach o szerokości poniżej 480px (telefony) */
 @media (max-width: 480px) {
     .navbar {
         padding: 8px 13px;

@@ -1,35 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
-import { useFavorites } from '../context/FavoritesContext'; // Importujemy hooka
+import { useFavorites } from '../context/FavoritesContext';
 import TradingViewWidget from '../components/TradingViewWidget';
 
 export default function Market() {
     const { theme } = useTheme();
-    // Używamy naszych ulubionych
-    // zmana halo działaj to ważne 
-    //test
     const { toggleFavorite, isFavorite } = useFavorites();
 
-    const isDark = theme === 'dark';
     const [coins, setCoins] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedCoin, setExpandedCoin] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
+    const isDark = theme === 'dark';
     const textColor = isDark ? 'white' : 'black';
     const cardBg = isDark ? '#1e293b' : '#f8fafc';
     const borderColor = isDark ? '#334155' : '#ccc';
+    const inputBg = isDark ? '#0f172a' : '#fff';
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false'
+                    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false'
                 );
                 setCoins(response.data);
                 setLoading(false);
             } catch (error) {
-                console.error("Błąd:", error);
+                console.error(error);
                 setLoading(false);
             }
         };
@@ -37,112 +36,146 @@ export default function Market() {
     }, []);
 
     const toggleRow = (id) => {
-        if (expandedCoin === id) setExpandedCoin(null);
-        else setExpandedCoin(id);
+        setExpandedCoin(expandedCoin === id ? null : id);
     };
 
     const getChartSymbol = (symbol) => {
-        if (symbol.toUpperCase() === 'USDT') return 'COINBASE:USDTUSD';
-        if (symbol.toUpperCase() === 'USDC') return 'KRAKEN:USDCUSD';
-        return `BINANCE:${symbol.toUpperCase()}USDT`;
+        const s = symbol.toUpperCase();
+        if (s === 'USDT') return 'COINBASE:USDTUSD';
+        if (s === 'USDC') return 'KRAKEN:USDCUSD';
+        return `BINANCE:${s}USDT`;
     };
 
-    if (loading) return <h2 style={{ textAlign: 'center', marginTop: '50px' }}>Ładowanie...</h2>;
+    const filteredCoins = coins.filter(coin => 
+        coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    if (loading) return <h2 style={{ textAlign: 'center', marginTop: '50px', color: textColor }}>Ładowanie rynku...</h2>;
 
     return (
-        <div style={{ padding: '20px', maxWidth: '1000px', margin: '0 auto', color: textColor }}>
+        <div style={{ 
+            height: 'calc(100vh - 80px)', 
+            display: 'flex',              
+            flexDirection: 'column',      
+            maxWidth: '1000px', 
+            margin: '0 auto', 
+            color: textColor,
+            padding: '10px'
+        }}>
+            <style>
+                {`
+                    .market-row { display: flex; align-items: center; padding: 15px; cursor: pointer; }
+                    .coin-rank { width: 40px; font-weight: bold; color: gray; }
+                    .coin-info { flex: 1; display: flex; align-items: center; gap: 10px; overflow: hidden; }
+                    .coin-data { text-align: right; display: flex; flex-direction: column; justify-content: center; min-width: 80px; margin-right: 15px; }
+                    .coin-price { font-weight: bold; font-size: 1rem; }
+                    .coin-percent { font-size: 0.85rem; font-weight: 600; }
+                    .coin-name-box { display: flex; flex-direction: column; }
+                    .coin-symbol { font-size: 0.8rem; color: gray; }
+                    
+                    @media (max-width: 768px) {
+                        .coin-rank { display: none; }
+                        .market-row { padding: 12px 5px; }
+                        .coin-price { font-size: 0.95rem; }
+                        .header-row { display: none !important; } 
+                    }
+                `}
+            </style>
 
-            <h1 style={{ textAlign: 'center', fontSize: '40px', marginBottom: '30px' }}>
-                Rynek Kryptowalut
-            </h1>
+            <div>
+                <h1 style={{ textAlign: 'center', fontSize: '32px', marginBottom: '20px' }}>
+                    Rynek Kryptowalut
+                </h1>
 
-            {/* NAGŁÓWEK */}
-            <div style={{ 
-                display: 'flex', 
-                fontWeight: 'bold', 
-                padding: '10px 20px', 
-                borderBottom: '2px solid gray', 
-                marginBottom: '10px',
-                gap: '10px',
-                fontSize: '0.9rem'
-            }}>
-                <div style={{ width: '30px' }}>#</div>
-                <div style={{ flex: 1 }}>Nazwa</div>
-                <div style={{ width: '100px', textAlign: 'right' }}>Cena</div>
-                <div style={{ width: '70px', textAlign: 'right' }}>24h %</div>
-                <div style={{ width: '40px', textAlign: 'center' }}>Fav</div>
+                <input 
+                    type="text" 
+                    placeholder="Szukaj (np. BTC)..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{
+                        width: '100%',
+                        padding: '12px',
+                        marginBottom: '10px',
+                        borderRadius: '10px',
+                        border: `1px solid ${borderColor}`,
+                        backgroundColor: inputBg,
+                        color: textColor,
+                        fontSize: '16px',
+                        outline: 'none'
+                    }}
+                />
+
+                <div className="header-row" style={{ 
+                    display: 'flex', 
+                    fontWeight: 'bold', 
+                    padding: '10px 15px', 
+                    borderBottom: '2px solid gray', 
+                    marginBottom: '5px',
+                    fontSize: '0.9rem',
+                    color: 'gray'
+                }}>
+                    <div style={{ width: '40px' }}>#</div>
+                    <div style={{ flex: 1 }}>Nazwa</div>
+                    <div style={{ width: '100px', textAlign: 'right', marginRight: '50px' }}>Cena / 24h</div>
+                    <div style={{ width: '30px' }}></div>
+                </div>
             </div>
 
-            {/* LISTA */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {coins.map((coin, index) => {
-                    const isExpanded = expandedCoin === coin.id;
-                    const symbolWykresu = getChartSymbol(coin.symbol);
-                    const kolorZmiany = coin.price_change_percentage_24h >= 0 ? 'green' : 'red';
+            <div style={{ 
+                flex: 1,              
+                overflowY: 'auto',    
+                paddingBottom: '20px', 
+                scrollbarWidth: 'thin',
+                scrollbarColor: isDark ? '#475569 #1e293b' : '#ccc #f1f1f1'
+            }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {filteredCoins.length > 0 ? (
+                        filteredCoins.map((coin) => {
+                            const isExpanded = expandedCoin === coin.id;
+                            const isFav = isFavorite(coin.id);
+                            const isGreen = coin.price_change_percentage_24h >= 0;
 
-                    // Sprawdzamy czy jest ulubiony
-                    const isFav = isFavorite(coin.id);
+                            return (
+                                <div key={coin.id} style={{ backgroundColor: cardBg, border: `1px solid ${borderColor}`, borderRadius: '10px', overflow: 'hidden' }}>
+                                    
+                                    <div className="market-row" onClick={() => toggleRow(coin.id)}>
+                                        <div className="coin-rank">{coin.market_cap_rank}</div>
+                                        
+                                        <div className="coin-info">
+                                            <img src={coin.image} alt={coin.name} style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
+                                            <div className="coin-name-box">
+                                                <span style={{ fontWeight: 'bold' }}>{coin.name}</span>
+                                                <span className="coin-symbol">{coin.symbol.toUpperCase()}</span>
+                                            </div>
+                                        </div>
 
-                    return (
-                        <div key={coin.id} style={{ backgroundColor: cardBg, border: `1px solid ${borderColor}`, borderRadius: '10px', overflow: 'hidden' }}>
+                                        <div className="coin-data">
+                                            <span className="coin-price">${coin.current_price?.toLocaleString()}</span>
+                                            <span className="coin-percent" style={{ color: isGreen ? '#10b981' : '#ef4444' }}>
+                                                {coin.price_change_percentage_24h?.toFixed(2)}%
+                                            </span>
+                                        </div>
 
-                            <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                padding: '15px 20px',
-                                gap: '10px',
-                                fontSize: '0.9rem',
-                                flexWrap: 'wrap'
-                            }}>
-                                {/* Klikalna część (Otwiera wykres) */}
-                                <div onClick={() => toggleRow(coin.id)} style={{ 
-                                    display: 'flex', 
-                                    flex: 1, 
-                                    alignItems: 'center', 
-                                    cursor: 'pointer',
-                                    gap: '10px',
-                                    minWidth: '200px'
-                                }}>
-                                    <div style={{ width: '30px', fontWeight: 'bold' }}>{index + 1}</div>
-                                    <img src={coin.image} alt={coin.name} style={{ width: '30px', height: '30px' }} />
-                                    <div>
-                                        <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{coin.name}</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'gray' }}>{coin.symbol.toUpperCase()}</div>
+                                        <div onClick={(e) => { e.stopPropagation(); toggleFavorite(coin); }} style={{ padding: '5px', cursor: 'pointer', fontSize: '1.4rem' }}>
+                                            {isFav ? '❤️' : '🤍'}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div style={{ width: '100px', textAlign: 'right', fontWeight: 'bold' }}>
-                                    ${coin.current_price.toLocaleString()}
+                                    {isExpanded && (
+                                        <div style={{ height: '350px', borderTop: `1px solid ${borderColor}`, padding: '10px', backgroundColor: isDark ? '#0f172a' : '#f1f5f9' }}>
+                                            <TradingViewWidget symbol={getChartSymbol(coin.symbol)} />
+                                        </div>
+                                    )}
                                 </div>
-                                <div style={{ width: '70px', textAlign: 'right', fontWeight: 'bold', color: kolorZmiany }}>
-                                    {coin.price_change_percentage_24h.toFixed(2)}%
-                                </div>
-
-                                {/* PRZYCISK ULUBIONE (Serce) */}
-                                <div style={{ width: '40px', textAlign: 'center' }}>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            toggleFavorite(coin);
-                                        }}
-                                        style={{
-                                            background: 'transparent', border: 'none', cursor: 'pointer',
-                                            fontSize: '24px', color: isFav ? 'red' : 'gray', transition: '0.2s'
-                                        }}
-                                    >
-                                        {isFav ? '➖' : '➕'}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {isExpanded && (
-                                <div style={{ height: '350px', borderTop: '1px solid gray', padding: '10px' }}>
-                                    <TradingViewWidget symbol={symbolWykresu} />
-                                </div>
-                            )}
+                            );
+                        })
+                    ) : (
+                        <div style={{ textAlign: 'center', padding: '20px', color: 'gray' }}>
+                            Brak wyników
                         </div>
-                    );
-                })}
+                    )}
+                </div>
             </div>
         </div>
     );

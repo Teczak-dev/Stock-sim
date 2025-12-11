@@ -27,6 +27,7 @@ export default function Home() {
           <Karta nazwa="GPW Warszawa" dane={gpwData} godziny="09:00 - 17:00" kolor={kolorWykresu} bg={cardBg} />
           <Karta nazwa="NYSE New York" dane={nyseData} godziny="15:30 - 22:00 (PL)" kolor={kolorWykresu} bg={cardBg} />
         </div>
+        
         <h1 style={{ fontSize: '56px', fontWeight: '900', marginBottom: '20px' }}>Twoja Giełda <span style={{ color: kolorWykresu }}>StockSim</span></h1>
         <p style={{ fontSize: '18px', opacity: 0.7, maxWidth: '600px', marginBottom: '40px' }}>Symulator inwestycyjny. "Jak zarobić, aby się nie narobić".</p>
         <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', justifyContent: 'center' }}>
