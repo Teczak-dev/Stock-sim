@@ -57,13 +57,20 @@ export default function Market() {
             </h1>
 
             {/* NAGŁÓWEK */}
-            <div style={{ display: 'flex', fontWeight: 'bold', padding: '10px 20px', borderBottom: '2px solid gray', marginBottom: '10px' }}>
-                <div style={{ width: '50px' }}>#</div>
+            <div style={{ 
+                display: 'flex', 
+                fontWeight: 'bold', 
+                padding: '10px 20px', 
+                borderBottom: '2px solid gray', 
+                marginBottom: '10px',
+                gap: '10px',
+                fontSize: '0.9rem'
+            }}>
+                <div style={{ width: '30px' }}>#</div>
                 <div style={{ flex: 1 }}>Nazwa</div>
-                <div style={{ width: '120px', textAlign: 'right' }}>Cena</div>
-                <div style={{ width: '80px', textAlign: 'right' }}>24h %</div>
-                {/* Nowa kolumna na serce */}
-                <div style={{ width: '50px', textAlign: 'center' }}>Fav</div>
+                <div style={{ width: '100px', textAlign: 'right' }}>Cena</div>
+                <div style={{ width: '70px', textAlign: 'right' }}>24h %</div>
+                <div style={{ width: '40px', textAlign: 'center' }}>Fav</div>
             </div>
 
             {/* LISTA */}
@@ -79,28 +86,43 @@ export default function Market() {
                     return (
                         <div key={coin.id} style={{ backgroundColor: cardBg, border: `1px solid ${borderColor}`, borderRadius: '10px', overflow: 'hidden' }}>
 
-                            <div style={{ display: 'flex', alignItems: 'center', padding: '15px 20px' }}>
+                            <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                padding: '15px 20px',
+                                gap: '10px',
+                                fontSize: '0.9rem',
+                                flexWrap: 'wrap'
+                            }}>
                                 {/* Klikalna część (Otwiera wykres) */}
-                                <div onClick={() => toggleRow(coin.id)} style={{ display: 'flex', flex: 1, alignItems: 'center', cursor: 'pointer' }}>
-                                    <div style={{ width: '50px', fontWeight: 'bold' }}>{index + 1}</div>
-                                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '15px' }}>
-                                        <img src={coin.image} alt={coin.name} style={{ width: '30px', height: '30px' }} />
-                                        <span style={{ fontSize: '18px', fontWeight: 'bold' }}>{coin.name}</span>
-                                        <span style={{ fontSize: '14px', color: 'gray' }}>{coin.symbol.toUpperCase()}</span>
-                                    </div>
-                                    <div style={{ width: '120px', textAlign: 'right', fontWeight: 'bold' }}>
-                                        ${coin.current_price.toLocaleString()}
-                                    </div>
-                                    <div style={{ width: '80px', textAlign: 'right', fontWeight: 'bold', color: kolorZmiany }}>
-                                        {coin.price_change_percentage_24h.toFixed(2)}%
+                                <div onClick={() => toggleRow(coin.id)} style={{ 
+                                    display: 'flex', 
+                                    flex: 1, 
+                                    alignItems: 'center', 
+                                    cursor: 'pointer',
+                                    gap: '10px',
+                                    minWidth: '200px'
+                                }}>
+                                    <div style={{ width: '30px', fontWeight: 'bold' }}>{index + 1}</div>
+                                    <img src={coin.image} alt={coin.name} style={{ width: '30px', height: '30px' }} />
+                                    <div>
+                                        <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{coin.name}</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'gray' }}>{coin.symbol.toUpperCase()}</div>
                                     </div>
                                 </div>
 
+                                <div style={{ width: '100px', textAlign: 'right', fontWeight: 'bold' }}>
+                                    ${coin.current_price.toLocaleString()}
+                                </div>
+                                <div style={{ width: '70px', textAlign: 'right', fontWeight: 'bold', color: kolorZmiany }}>
+                                    {coin.price_change_percentage_24h.toFixed(2)}%
+                                </div>
+
                                 {/* PRZYCISK ULUBIONE (Serce) */}
-                                <div style={{ width: '50px', textAlign: 'center' }}>
+                                <div style={{ width: '40px', textAlign: 'center' }}>
                                     <button
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Żeby nie otwierało wykresu jak klikasz serce
+                                            e.stopPropagation();
                                             toggleFavorite(coin);
                                         }}
                                         style={{
@@ -108,7 +130,7 @@ export default function Market() {
                                             fontSize: '24px', color: isFav ? 'red' : 'gray', transition: '0.2s'
                                         }}
                                     >
-                                        {isFav ? '❤️' : '🤍'}
+                                        {isFav ? '➖' : '➕'}
                                     </button>
                                 </div>
                             </div>

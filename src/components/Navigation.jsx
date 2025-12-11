@@ -14,8 +14,8 @@ export default function Navigation() {
             <div className="nav-links-container">
                 <NavLink to="/" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>Home</NavLink>
                 <NavLink to="/Market" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>Rynek</NavLink>
-                <NavLink to="/portfolio" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>Portfel</NavLink>
-                <NavLink to="/symulator" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>Symulator</NavLink>
+                <NavLink to="/obserwacje" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>Obserwacje</NavLink>
+                <NavLink to="/kontakt" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>Kontakt</NavLink>
 
                 {/* PRZYCISK ZMIANY MOTYWU */}
                 <button
@@ -38,7 +38,7 @@ export default function Navigation() {
                 >
                     {theme === 'light' ? '🌙' : '☀️'}
                 </button>
-                {/* <NavLink to="/Login" className="nav-item nav-btn-login">Login</NavLink> */}
+                 {/*<NavLink to="/Login" className="nav-item nav-btn-login">Login</NavLink> */}
 
             </div>
         </nav>

@@ -4,25 +4,19 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  /* Musi być nad wykresem */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-
-  /* Efekt szkła */
+  padding: 16px 32px;
   background: rgba(15, 23, 42, 0.8);
-  /* Ciemny granat, lekko przezroczysty */
   backdrop-filter: blur(10px);
-  /* Rozmycie tego co pod spodem */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .nav-logo {
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: 800;
-  /* Gradientowy tekst */
   background: linear-gradient(90deg, #10b981, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -38,25 +32,21 @@
 
 .nav-item {
   color: #94a3b8;
-  /* Szary kolor tekstu */
   text-decoration: none;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 16px;
   transition: all 0.3s ease;
   padding: 8px 12px;
   border-radius: 6px;
 }
 
-/* Efekt po najechaniu myszką */
 .nav-item:hover,
 .nav-item.active {
   color: #fff;
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
-  /* Zielona poświata */
 }
 
-/* Przycisk logowania wyróżniony */
 .nav-btn-login {
   background-color: #10b981;
   color: white !important;
@@ -73,25 +63,16 @@
 body {
   font-family: 'Inter', sans-serif;
   background-color: #ffffff;
-  /* Zmienione na biały */
   color: #1e293b;
-  /* Ciemny tekst domyślnie */
 }
-
-/* src/index.css */
-
-
 
 /* KOLORY DLA TRYBU CIEMNEGO (DARK MODE) */
 [data-theme='dark'] {
   --bg-color: #121314;
-  /* Ciemny granat */
   --text-color: #f1f5f9;
-  /* Prawie biały */
   --nav-bg: rgba(23, 24, 27, 0.85);
   --card-bg: #1e293b;
   --accent: #34d399;
-  /* Jaśniejszy zielony */
   --chart-fill: rgba(16, 185, 129, 0.15);
   --border-color: #334155;
 }
@@ -108,22 +89,18 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
-  /* Płynna zmiana kolorów */
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* Ukrywa pasek w Chrome, Safari, Opera */
+/* Ukrywa pasek scrollbara */
 ::-webkit-scrollbar {
   display: none;
 }
 
-/* Ukrywa pasek w Firefox, IE, Edge */
 html,
 body {
   scrollbar-width: none;
-  /* Firefox */
   -ms-overflow-style: none;
-  /* IE/Edge */
 }

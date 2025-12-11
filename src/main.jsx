@@ -11,7 +11,7 @@ import { FavoritesProvider } from './context/FavoritesContext' // <--- TO JEST N
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import Market from './pages/Market'
-import Portfolio from './pages/Portfolio' // <--- TO JEST TWOJA GRA
+import Obserwacje from './pages/Obserwacje' // <--- TO JEST TWOJA GRA
 
 
 import NotFound from './pages/NotFound'
@@ -24,7 +24,7 @@ import LoginForm from './pages/LoginForm'
 
 
 import Navigation from './components/Navigation'
-import Symulator from './pages/Symulator'
+import Kontakt from './pages/Kontakt'
 
 const router = createBrowserRouter([
   {
@@ -41,12 +41,12 @@ const router = createBrowserRouter([
         element: <Market />
       },
       {
-        path: '/portfolio', // <--- TU JEST TWOJA GRA
-        element: <Portfolio />
+        path: '/obserwacje', // <--- TU JEST TWOJA GRA
+        element: <Obserwacje />
       },
       {
-        path: '/symulator',
-        element: <Symulator />
+        path: '/kontakt',
+        element: <Kontakt />
       },
       {
         path: '/Login',
