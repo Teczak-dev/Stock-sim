@@ -110,7 +110,6 @@ To małe wykresy z aplikacji TradingView. Ładują się dynamicznie gdy kliknies
 
 ## 🔮 Plany na przyszłość
 
-- Live updates (WebSocket)
 - Wyszukiwarka
 - Dodanie wykresów akcji
 - Login
