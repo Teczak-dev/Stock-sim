@@ -5,52 +5,27 @@ import './Navigation.css'
 
 export default function Navigation() {
   const { theme, toggleTheme } = useTheme()
-  const [isOpen, setIsOpen] = useState(false)
+  const [hamburgerOpen, setHamburgerOpen] = useState(false)
 
-  const isDark = theme === 'dark'
-  const kolorTla = isDark ? '#0f172a' : '#ffffff'
-  const kolorTekstu = isDark ? 'white' : 'black'
-  const kolorAktywny = '#10b981'
-
-  const stylLinku = ({ isActive }) => ({
-    textDecoration: 'none',
-    padding: '10px',
-    fontWeight: isActive ? 'bold' : 'normal',
-    color: isActive ? kolorAktywny : kolorTekstu,
-    borderBottom: isActive ? `2px solid ${kolorAktywny}` : 'none'
-  })
+  const toggleHamburger = () => setHamburgerOpen(!hamburgerOpen)
+  const closeHamburger = () => setHamburgerOpen(false)
 
   return (
-    <nav className="navbar" style={{ backgroundColor: kolorTla, borderBottom: '1px solid gray' }}>
-      
-      <Link to="/" style={{ fontSize: '24px', textDecoration: 'none', fontWeight: 'bold', color: kolorTekstu }}>
-        StockSim 📈
-      </Link>
-
-      <button 
-        className="hamburger-toggle" 
-        onClick={() => setIsOpen(!isOpen)} 
-        style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', color: kolorTekstu }}
-      >
-        ☰
-      </button>
-
-      <div className={`hamburger-menu ${isOpen ? 'open' : ''}`} style={{ backgroundColor: isOpen ? kolorTla : 'transparent' }}>
-        <NavLink to="/" style={stylLinku} onClick={() => setIsOpen(false)}>Home</NavLink>
-        <NavLink to="/market" style={stylLinku} onClick={() => setIsOpen(false)}>Rynek</NavLink>
-        <NavLink to="/obserwacje" style={stylLinku} onClick={() => setIsOpen(false)}>Obserwacje</NavLink>
-        <NavLink to="/kontakt" style={stylLinku} onClick={() => setIsOpen(false)}>Kontakt</NavLink>
+    <nav className="navbar" style={{ backgroundColor: 'var(--nav-bg)' }}>
+      <Link to="/" className="nav-logo" style={{ color: 'var(--text-color)' }}>StockSim 📈</Link>
+      <button className="hamburger-toggle" onClick={toggleHamburger} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-color)', fontSize: '100%' }}>☰</button>
+      <div className={`hamburger-menu ${hamburgerOpen ? 'open' : ''}`}>
+        <NavLink to="/" onClick={closeHamburger} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>Home</NavLink>
+        <NavLink to="/market" onClick={closeHamburger} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>Rynek</NavLink>
+        <NavLink to="/obserwacje" onClick={closeHamburger} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>Obserwacje</NavLink>
+        <NavLink to="/kontakt" onClick={closeHamburger} className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>Kontakt</NavLink>
       </div>
-
+      <style>{`.nav-item.active { font-weight: bold; border-bottom: 2px solid var(--accent-color); }`}</style>
       <div className="nav-actions">
-        <button 
-          onClick={toggleTheme} 
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px', marginLeft: '15px' }}
-        >
-          {isDark ? '☀️' : '🌙'}
+        <button onClick={toggleTheme} style={{ background: 'transparent', borderRadius: '50%', width: '40px', height: '40px', cursor: 'pointer', fontSize: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '10px', color: 'var(--text-color)' }} title="Zmień motyw">
+          {theme === 'light' ? '🌙' : '☀️'}
         </button>
       </div>
-
     </nav>
   )
 }
