@@ -22,7 +22,7 @@ export default function Navigation() {
       </div>
       <style>{`.nav-item.active { font-weight: bold; border-bottom: 2px solid var(--accent-color); }`}</style>
       <div className="nav-actions">
-        <button onClick={toggleTheme} style={{ background: 'transparent', borderRadius: '50%', width: '40px', height: '40px', cursor: 'pointer', fontSize: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '10px', color: 'var(--text-color)' }} title="Zmień motyw">
+        <button onClick={toggleTheme} style={{ border:'none',background: 'transparent', width: '40px', height: '40px', cursor: 'pointer', fontSize: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '10px', color: 'var(--text-color)' }} title="Zmień motyw">
           {theme === 'light' ? '🌙' : '☀️'}
         </button>
       </div>
