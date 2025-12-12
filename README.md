@@ -126,7 +126,8 @@ To małe wykresy z aplikacji TradingView. Ładują się dynamicznie gdy kliknies
 - Dodanie wykresów akcji
 - Login
 
-
+# Podziękowania
+> Cały styl dokumentacji został pożyczony od [@Teczak-dev](https://github.com/Teczak-dev) a podziękowania zostały pożyczone od [@NokielCB](https://github.com/NokielCB).
 
 ## 📞 Kontakt
 
